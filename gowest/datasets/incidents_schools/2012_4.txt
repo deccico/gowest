@@ -1,0 +1,11 @@
+REGION Assault Threats Weapons Drugs Other TOTAL
+Hunter/Central Coast 13 4 9 4 12 42
+Illawarra South East 9 8 6 4 11 38
+New England 4 4 4 0 3 15
+North Coast 7 4 8 1 4 24
+Northern Sydney 6 2 2 3 0 13
+Riverina 12 3 4 1 1 21
+South Western Sydney 11 7 6 5 11 40
+Sydney 9 6 1 2 8 26
+Western NSW 10 8 2 0 2 22
+Western Sydney 7 12 3 2 12 36
