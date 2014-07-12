@@ -81,7 +81,7 @@ def getMedianWeeklyRent(LGAs):
                 medianPerLGA[lga] = getMedianRent(rentbinsPerLGA[lga], totalPerLGA[lga])
             lowest5LGAMedians = dict(sorted(medianPerLGA.iteritems(), key=operator.itemgetter(1))[:5])
         return median, lowest5LGAMedians
-    return None
+    return None, None
 
 def getMedianRent(rentbins, total):
     cumsum = 0
