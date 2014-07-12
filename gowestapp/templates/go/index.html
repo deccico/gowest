@@ -38,9 +38,10 @@
 
             <p class="lead">Please enter your suburb:
               <span class="glyphicon glyphicon-screenshot"></span> <input class="form-control" type="text">
+              <input id="txtcompare" class="form-control" type="text">
             </p>
             <p class="lead">
-              <a href="#about" class="btn btn-lg btn-default">Compare</a>
+              <a id="btncompare" href="#" class="btn btn-lg btn-default">Compare</a>
             </p>
           </div>
 
@@ -55,7 +56,9 @@
                 Did you know that Byron has the highest stealing incidents in NSW. Source: Crime Statistics Bureau</br>
             </p>
           </div>
-
+          <div>
+              {{ compare }}
+          </div>
           <div class="mastfoot">
             <div class="inner">
               <p>Created by #GovHack 2014 Team Optimer Prime.</p>
@@ -75,5 +78,13 @@
                  scrollSpeed: 1200
             });
         </script>
+    <script type="text/javascript">
+        var a = document.getElementById("btncompare");
+        a.onclick = function() {
+            var input = document.getElementById("txtcompare").value;
+            a.href = "?compare=" + input;
+            return true;
+        };
+    </script>
   </body>
 </html>

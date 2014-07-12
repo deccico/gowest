@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-from go.datasets.census_rent import process
+from go.datasets.lga_suburb_list import process
 
 def index(request):
-    context = {'data': process.getsomething()}
-    context['pp'] = request.GET.get('q', 'lalal')
+    context = {'suburbsToLGAs': process.process()}
+    context['compare'] = request.GET.get('compare', '')
     return render(request, 'go/index.html', context)
