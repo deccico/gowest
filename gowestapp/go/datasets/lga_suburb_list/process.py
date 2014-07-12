@@ -12,6 +12,7 @@ def process():
     isfirst = True
     suburbDict = {}
     lgaDict = {}
+    suburbPostcodeDict = {}
     for row in reader:
         if isfirst:
             isfirst = False
@@ -36,14 +37,17 @@ def process():
         if 'nsw.gov.au' in suburb:
             continue
 
+        postcode = row[3]
+
         if suburb not in suburbDict:
             suburbDict[suburb] = []
         if lga not in suburbDict[suburb]:
             suburbDict[suburb].append(lga)
+        suburbPostcodeDict[suburb] = postcode
 
         lgaDict[lga] = region
 
-    return suburbDict, lgaDict
+    return suburbDict, lgaDict, suburbPostcodeDict
 
 if __name__ == '__main__':
     print process()
