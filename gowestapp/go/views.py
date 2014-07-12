@@ -6,7 +6,7 @@ from go.datasets.census_rent.process import getMedianWeeklyRent
 def index(request):
     westernSydneyLGAs = ['Auburn', 'Bankstown', 'Blacktown', 'Blue Mountains', 'Camden', 'Campbelltown', 'Fairfield', 'Hawkesbury', 'Hills Shire', 'Holroyd', 'Liverpool', 'Parramatta', 'Penrith', 'Wollondilly']
     context = {}
-    suburbsToLGA, lgaToRegion = process.process()
+    suburbsToLGA, lgaToRegion, suburbToPostcode = process.process()
     compare = ' '.join(w.capitalize() for w in request.GET.get('compare', '').strip().split())    # trim and title capitalise
 
     nwss = sorted([suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga not in westernSydneyLGAs])
