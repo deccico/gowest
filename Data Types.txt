@@ -1,0 +1,13 @@
+- Crime
+- Population (including density)
+- Income
+- Rent
+- Mortgage Payments
+- Children per family
+- Marital status
+- Education and schooling
+- Diversity
+- Average property size
+- Number of local restaurants
+
+--> Data types listed at bottom of prize description
