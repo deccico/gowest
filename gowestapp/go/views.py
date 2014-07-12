@@ -7,9 +7,20 @@ def index(request):
     context = {}
     suburbsToLGA, lgaToRegion = process.process()
     compare = request.GET.get('compare', '')
+
+    nwss = sorted([suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga not in westernSydneyLGAs])
+    context['non_ws_suburbs'] = str(nwss).replace("'", '"')
     context['compare'] = ' '.join(w.capitalize() for w in compare.strip().split())    # trim and title capitalise
     context['info'] = getcompareinfo(context['compare'], suburbsToLGA, lgaToRegion, westernSydneyLGAs)
     return render(request, 'go/index.html', context)
+
+#def getNonWaSuburbs(suburbToLGA, westernSydneyLGAs):
+    #for all suburbs not in western sydney:
+    #sorted([suburb for suburb in suburbToLGA.keys() for lga in suburbToLGA[suburb] if lga not in westernSydneyLGAs])
+    #for all suburbs in western sydney:
+    #sorted([suburb for suburb in suburbToLGA.keys() for lga in suburbToLGA[suburb] if lga in westernSydneyLGAs])
+
+
 
 def getcompareinfo(compare, suburbToLGA, lgaToRegion, westernSydneyLGAs):
     if compare == '':
