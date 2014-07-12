@@ -2,8 +2,9 @@
 process each line of night clubs into a python dictionary entry
 '''
 import csv
+import os
 def process():
-    file = open('data.csv', 'r')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/data.csv', 'r')
     reader = csv.reader(file)
     results = {}
     for row in reader:

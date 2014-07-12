@@ -41,7 +41,19 @@
             <h1 class="cover-heading">Facts</h1>
             <p class="lead">
                 {{ info }}<br />
-                {{ medianrent }}
+                {{ medianrent }}<br />
+                <br />
+                Also, you are missing out
+                {% for item in randomattractions %}
+                     <a href="{{ item.url }}">{{ item.place }}</a> and
+                {% endfor %} more if you don't visit Western Sydney! Visit
+                <a href="http://www.sydney.com/destinations/sydney/sydney-west">Sydney.com</a> for more attractions! <br />
+                 <br />
+                And do you want to spent time in exciting events? Check out
+                {% for item in randomevents %}
+                     <a href="{{ item.url }}">{{ item.place }}</a> and
+                {% endfor %} more if you don't visit Western Sydney! Visit
+                <a href="http://www.sydney.com/destinations/sydney/sydney-west/events">Sydney.com</a> for more activities! <br />
             </p>
           </div>
           {% endif %}

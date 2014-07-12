@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 from go.datasets.lga_suburb_list import process
 from go.datasets.census_rent.process import getMedianWeeklyRent
+from go.datasets.attractions.process import selectrandom2attractions
+from go.datasets.events.process import selectrandom2events
 
 def index(request):
     westernSydneyLGAs = ['Auburn', 'Bankstown', 'Blacktown', 'Blue Mountains', 'Camden', 'Campbelltown', 'Fairfield', 'Hawkesbury', 'The Hills', 'Holroyd', 'Liverpool', 'Parramatta', 'Penrith', 'Wollondilly']
@@ -14,6 +16,18 @@ def index(request):
     context['compare'] = compare
     context['info'] = getcompareinfo(compare, suburbsToLGA, lgaToRegion, westernSydneyLGAs)
     context['medianrent'] = getMedianRent(compare, findMatchingLGAs(compare, suburbsToLGA, lgaToRegion), westernSydneyLGAs)
+    x = getAttractions()
+    attractions = []
+    for i in x:
+        attractions.append({"url":x[i], "place":i})
+    context['randomattractions'] = attractions
+
+    x = getEvents()
+    events = []
+    for i in x:
+        events.append({"url":x[i], "place":i})
+    context['randomevents'] = events
+
     return render(request, 'go/index.html', context)
 
 def getUniqueItems(seq):
@@ -86,3 +100,17 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     if medianRentWest < medianRent:
         out += ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!'
     return out
+
+def getAttractions():
+    attractions = selectrandom2attractions()
+    #out = 'You can also check out the great Western Sydney attractions: '
+    #for place,url in attractions.iteritems():
+    #    out += "<a href='" + url + "'>" + place + "</a>" + ","
+    return attractions
+
+def getEvents():
+    events = selectrandom2events()
+    #out = 'You can also check out the great Western Sydney attractions: '
+    #for place,url in attractions.iteritems():
+    #    out += "<a href='" + url + "'>" + place + "</a>" + ","
+    return events
