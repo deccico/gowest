@@ -23,6 +23,7 @@ def process():
         # Remove extra strings in LGA names
         lga = row[1].replace(' City Council', '')\
             .replace(' Shire Council', '')\
+            .replace(' Municipal Council', '')\
             .replace(' Council', '')\
             .replace('Council of the City of ', '')\
             .replace(' Shire Counc', '')
