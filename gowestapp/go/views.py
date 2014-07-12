@@ -6,11 +6,8 @@ def index(request):
     westernSydneyLGAs = ['Auburn', 'Bankstown', 'Blacktown', 'Blue Mountains', 'Camden', 'Campbelltown', 'Fairfield', 'Hawkesbury', 'Hills Shire', 'Holroyd', 'Liverpool', 'Parramatta', 'Penrith', 'Wollondilly']
     context = {}
     suburbsToLGA, lgaToRegion = process.process()
-    try:
-        compareu = request.GET.get('compare', '')
-        context['compare'] = ' '.join(w.capitalize() for w in compareu.encode('utf8').strip().split())    # trim and title capitalise
-    except UnicodeDecodeError:
-        context['compare'] = ''
+    compare = request.GET.get('compare', '')
+    context['compare'] = ' '.join(w.capitalize() for w in compare.strip().split())    # trim and title capitalise
     context['info'] = getcompareinfo(context['compare'], suburbsToLGA, lgaToRegion, westernSydneyLGAs)
     return render(request, 'go/index.html', context)
 
