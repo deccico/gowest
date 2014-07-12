@@ -4,7 +4,7 @@ from go.datasets.lga_suburb_list import process
 from go.datasets.census_rent.process import getMedianWeeklyRent
 
 def index(request):
-    westernSydneyLGAs = ['Auburn', 'Bankstown', 'Blacktown', 'Blue Mountains', 'Camden', 'Campbelltown', 'Fairfield', 'Hawkesbury', 'Hills Shire', 'Holroyd', 'Liverpool', 'Parramatta', 'Penrith', 'Wollondilly']
+    westernSydneyLGAs = ['Auburn', 'Bankstown', 'Blacktown', 'Blue Mountains', 'Camden', 'Campbelltown', 'Fairfield', 'Hawkesbury', 'The Hills', 'Holroyd', 'Liverpool', 'Parramatta', 'Penrith', 'Wollondilly']
     context = {}
     suburbsToLGA, lgaToRegion, suburbToPostcode = process.process()
     compare = ' '.join(w.capitalize() for w in request.GET.get('compare', '').strip().split())    # trim and title capitalise
@@ -67,12 +67,21 @@ def getcompareinfo(compare, suburbToLGA, lgaToRegion, westernSydneyLGAs):
 
     return out
 
+import random
+
 def getMedianRent(compare, LGAs, westernSydneyLGAs):
-    medianRent = getMedianWeeklyRent(LGAs)
-    medianRentWest = getMedianWeeklyRent(westernSydneyLGAs)
+    medianRent, _ = getMedianWeeklyRent(LGAs)
+    medianRentWest, lowest5WestLGA = getMedianWeeklyRent(westernSydneyLGAs)
     if medianRent is None or medianRentWest is None:
         return ''
-    out = 'The median weekly rent for Western Sydney is $' + str(medianRentWest) +\
+
+    place = 'Western Sydney'
+    # See if the rent for Western Sydney is lower. If not, find a low-rent area in Western Sydney to compare
+    randomLowestRentLGAInTheWest = random.choice(list(lowest5WestLGA.keys()))
+    if len(lowest5WestLGA) > 0 and medianRentWest >= medianRent and lowest5WestLGA[randomLowestRentLGAInTheWest] < medianRent:
+        place = randomLowestRentLGAInTheWest
+        medianRentWest = lowest5WestLGA[randomLowestRentLGAInTheWest]
+    out = 'The median weekly rent for ' + place + ' is $' + str(medianRentWest) +\
           ', compared to $' + str(medianRent) + ' in ' + compare + '.'
     if medianRentWest < medianRent:
         out += ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!'
