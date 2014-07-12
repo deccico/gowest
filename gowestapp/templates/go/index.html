@@ -19,11 +19,12 @@
         <div class="cover-container">
 
           <div class="inner cover">
+            {% if not info %}
             <h1 class="cover-heading">Go West!</h1>
             <p class="lead">How does Western Sydney compare to your suburb of choice?</br>
                 Find out the facts - all may not be as you currently presume.</p>
               </br> </br> </br> </br>
-
+            {% endif %}
             <p class="lead">Suburb:
               <span class="glyphicon glyphicon-screenshot"></span>
                 <input id="txtcompare" class="form-control" type="text" data-provide="typeahead"
@@ -43,13 +44,13 @@
                 {{ medianrent }}
             </p>
           </div>
+          {% endif %}
           <div class="mastfoot">
             <div class="inner">
               <p>Created by #GovHack 2014 Team Optimer Prime.</p>
             </div>
           </div>
         </div>
-         {% endif %}
       </div>
     </div>
 
@@ -74,15 +75,13 @@
                 return "?compare=" + document.getElementById("txtcompare").value;
             }
             // click button submits request
-            $('#btncompare').onclick = function() {
-                this.href = getCompareLink();
-                return true;
-            };
+            $('#btncompare').click(function() {
+                window.location = getCompareLink();
+            });
 
             // Press enter clicks button
             $('#txtcompare').keypress(function(e){
                 if(e.keyCode==13) {
-                    $('#btncompare').click();
                     window.location = getCompareLink();
                 }
             });
