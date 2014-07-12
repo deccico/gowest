@@ -4,4 +4,5 @@ from go.datasets.census_rent import process
 
 def index(request):
     context = {'data': process.getsomething()}
+    context['pp'] = request.GET.get('q', 'lalal')
     return render(request, 'go/index.html', context)
