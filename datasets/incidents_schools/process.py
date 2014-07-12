@@ -31,27 +31,24 @@ def process_2012(file, term):
                     continue
                 type = types[typeindex]
                 number = int(col)
-                if region not in results:
-                    results[region] = {}
-                if type not in results[region]:
-                    results[region][type] = {}
-                if year not in results[region][type]:
-                    results[region][type][year] = {}
-                results[region][type][year] = {term: number}
+                addresult(results, region, type, year, term, number)
                 typeindex += 1
                 if typeindex == len(types):
                     break
     return results
 
 def process_old(file):
-    text = file.readlines()
+    text = ' '.join(file.readlines())
     # Tokenise whole thing
     tokens = text.split()
     state = 'start'
     year = None
     terms = []
+    termindex = 0
     categories = ['Assault', 'Drugs', 'Other', 'Threats', 'Weapons']
     regiontokens = []
+    results = {}
+    data = []
     for token in tokens:
         if state == 'start':
             if 'Term' == token:
@@ -64,7 +61,7 @@ def process_old(file):
                 terms.append(term)
             elif token.isdigit():
                 year = token
-            elif token != 'Term':
+            elif token == 'Region':
                 state = 'data'
                 regiontokens = []
         elif state == 'data':
@@ -73,6 +70,40 @@ def process_old(file):
             if not token.isdigit():
                 #Hunter/Central
                 #Coast
+                if len(data) > 0:
+                    region = ' '.join(regiontokens)
+                    term = terms[termindex]
+                    for category, number in zip(categories, data):
+                        addresult(results, region, category, year, term, number)
+                    termindex = 1 - termindex
+                    data = []
+                    regiontokens = []
+                if token == 'Term':
+                    state = 'termyears'
+                    terms = []
+                    termindex = 0
+                    regiontokens = []
+                    continue
+                regiontokens.append(token)
+            else:
+                #13
+                #4
+                data.append(token)
+    if len(data) > 0:
+        region = ' '.join(regiontokens)
+        term = terms[termindex]
+        for category, number in zip(categories, data):
+            addresult(results, region, category, year, term, number)
+    return results
+
+def addresult(results, region, type, year, term, number):
+    if region not in results:
+        results[region] = {}
+    if type not in results[region]:
+        results[region][type] = {}
+    if year not in results[region][type]:
+        results[region][type][year] = {}
+    results[region][type][year] = {term: number}
 
 from os import walk
 def process():
@@ -82,18 +113,21 @@ def process():
         break
     allresults = {}
     for filename in f:
+        results = {}
         if filename.startswith('2012'):
             #2012_1.txt
             term = filename[filename.find('_')+1:filename.find('.')]
             results = process_2012(open(filename, 'r'), term)
-            for region, regionv in results.items():
-                if region not in allresults:
-                    allresults[region] = {}
-                for type, typev in regionv.items():
-                    if type not in allresults[region]:
-                        allresults[region][type] = {}
-                    for year, yearv in typev.items():
-                        allresults[region][type][year] = yearv
+        elif filename == '2005-2011.txt':
+            results = process_old(open(filename, 'r'))
+        for region, regionv in results.items():
+            if region not in allresults:
+                allresults[region] = {}
+            for type, typev in regionv.items():
+                if type not in allresults[region]:
+                    allresults[region][type] = {}
+                for year, yearv in typev.items():
+                    allresults[region][type][year] = yearv
     return allresults
 
 if __name__ == '__main__':
