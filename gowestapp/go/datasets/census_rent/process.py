@@ -20,6 +20,9 @@ def process():
         addrow(results, state, suburb, rentbin, number)
     return results
 
+def getsomething():
+    return "something"
+
 def addrow(results, state, suburb, rentbin, number):
     if state not in results:
         results[state] = {}

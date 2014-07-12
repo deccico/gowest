@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
-from datasets.census_rent import process
+from go.datasets.census_rent import process
+
 def index(request):
-    context = {}
+    context = {'data': process.getsomething()}
     return render(request, 'go/index.html', context)

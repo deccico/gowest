@@ -29,7 +29,7 @@
               <ul class="nav masthead-nav">
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#section-contact">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -38,10 +38,18 @@
             <h1 class="cover-heading">Go West!</h1>
             <p class="lead">How Western Sydney compares to your suburb of choice?
                 Discover the facts based on the Australian Government data.</p>
+              </br></br></br></br>
+
+            <p class="lead">Please enter your suburb:
+              <input type="text">
+            </p>
             <p class="lead">
-              <a href="#" class="btn btn-lg btn-default">Learn more</a>
+              <a href="#" class="btn btn-lg btn-default">Compare</a>
+                {{ data }}
             </p>
           </div>
+
+
 
           <div class="mastfoot">
             <div class="inner">
@@ -55,10 +63,15 @@
 
     </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="{% static "js/plugins.js" %}"  ></script>
+        <script>
+             $('#top-nav').onePageNav({
+                 currentClass: 'active',
+                 changeHash: true,
+                 scrollSpeed: 1200
+            });
+        </script>
   </body>
 </html>
