@@ -43,6 +43,37 @@ def process_2012(file, term):
                     break
     return results
 
+def process_old(file):
+    text = file.readlines()
+    # Tokenise whole thing
+    tokens = text.split()
+    state = 'start'
+    year = None
+    terms = []
+    categories = ['Assault', 'Drugs', 'Other', 'Threats', 'Weapons']
+    regiontokens = []
+    for token in tokens:
+        if state == 'start':
+            if 'Term' == token:
+                #Term 1, 2011 Term 2, 2011
+                state = 'termyears'
+        elif state == 'termyears':
+            if ',' in token:
+                #Term 1, 2011 Term 2, 2011
+                term = token[:-1]
+                terms.append(term)
+            elif token.isdigit():
+                year = token
+            elif token != 'Term':
+                state = 'data'
+                regiontokens = []
+        elif state == 'data':
+            if token in categories or token == 'Total' or token == 'Region':
+                continue
+            if not token.isdigit():
+                #Hunter/Central
+                #Coast
+
 from os import walk
 def process():
     f = []
