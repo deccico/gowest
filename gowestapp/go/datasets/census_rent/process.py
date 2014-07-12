@@ -16,12 +16,11 @@ def process():
         state = row[1]
         lga = row[2][:row[2].rfind(' ')]    # ignore last token (C)
         rentbin = row[5]
+        if rentbin == 'Total':
+            continue
         number = int(row[7])
         addrow(results, state, lga, rentbin, number)
     return results
-
-def getsomething():
-    return "something"
 
 def addrow(results, state, lga, rentbin, number):
     if state not in results:
@@ -32,5 +31,40 @@ def addrow(results, state, lga, rentbin, number):
         results[state][lga][rentbin] = 0
     results[state][lga][rentbin] += number
 
+def getMedianWeeklyRent(LGAs):
+    data = process()
+
+    rentbins = {}   # dict of {rentbin: count}
+    total = 0
+    for lga in LGAs:
+        for statev in data.values():
+            if lga in statev:
+                lgav = statev[lga]
+                for rentbin, number in lgav.iteritems():
+                    if rentbin not in rentbins:
+                        rentbins[rentbin] = 0
+                    rentbins[rentbin] += number
+                    total += number
+                break
+
+    if total > 0:
+        # Find median
+        cumsum = 0
+        for rentbin, count in iter(sorted(rentbins.iteritems())):
+            cumsum += count
+            if cumsum > total / 2:
+                if '-' in rentbin:
+                    #$150-$199
+                    rentpair = rentbin.split('-')
+                    # Strip dollar sign
+                    rentlow = int(rentpair[0][1:])
+                    renthigh = int(rentpair[1][1:])
+                    return (rentlow + renthigh) / 2
+                elif 'and over' in rentbin:
+                    #$650 and over
+                    return int(rentbin[1:rentbin.find(' and over')])
+    return None
+
 if __name__ == '__main__':
     print process()
+    print getMedianWeeklyRent(['Sutherland Shire'])

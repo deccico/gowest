@@ -7,16 +7,12 @@
     <title>Go Go West!</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap-theme.min.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
     <link href="{% static "css/cover.css" %}" rel="stylesheet">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
+
 <body>
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
@@ -51,11 +47,6 @@
           <div class="inner cover">
             <h1 class="cover-heading">Facts</h1>
             <p class="lead">
-                Data: {{ data }} <br/>
-                Url data: {{ pp }} <br/>
-            </p>
-            <p class="lead">
-                Did you know that Byron has the highest theft rate in NSW?<br/> Source: Crime Statistics Bureau<br/>
                 {{ info }}
             </p>
           </div>
@@ -68,16 +59,21 @@
       </div>
     </div>
 
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
-        <script src="{% static "js/plugins.js" %}"  ></script>
-        <script>
-             $('#top-nav').onePageNav({
-                 currentClass: 'active',
-                 changeHash: true,
-                 scrollSpeed: 1200
-            });
-        </script>
+    <script src="{% static "js/plugins.js" %}"  ></script>
+    <script>
+         $('#top-nav').onePageNav({
+             currentClass: 'active',
+             changeHash: true,
+             scrollSpeed: 1200
+        });
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             var getCompareLink = function() {
