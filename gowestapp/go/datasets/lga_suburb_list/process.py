@@ -4,10 +4,11 @@ Load CSV of region,LGA,suburb,postcode, and returns multiple dicts:
 - Dict of LGA => region
 '''
 import csv
+import os
 
 
 def process():
-    reader = csv.reader(open('data.csv', 'r'))
+    reader = csv.reader(open(os.path.dirname(os.path.realpath(__file__)) + '/data.csv', 'r'))
     isfirst = True
     suburbDict = {}
     lgaDict = {}
