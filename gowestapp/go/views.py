@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 def index(request):
-    return HttpResponse("Go Go West!")
+    context = {}
+    return render(request, 'go/index.html', context)
