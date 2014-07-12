@@ -3,8 +3,11 @@ Process raw data into dictionary: {state => {lga => {weekly rent bin => count}}}
 e.g. {'New South Wales' => {'North Sydney' => {'$450-$549' => 2790}}}
 '''
 import csv
+import os
+
+
 def process():
-    file = open('data.csv', 'r')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/data.csv', 'r')
     isfirst = True
     reader = csv.reader(file)
     results = {}

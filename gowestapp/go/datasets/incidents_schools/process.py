@@ -106,9 +106,12 @@ def addresult(results, region, type, year, term, number):
     results[region][type][year] = {term: number}
 
 from os import walk
+import os
+
+
 def process():
     f = []
-    for (dirpath, dirnames, filenames) in walk('.'):
+    for (dirpath, dirnames, filenames) in walk(os.path.dirname(os.path.realpath(__file__))):
         f.extend(filenames)
         break
     allresults = {}
