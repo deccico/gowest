@@ -15,6 +15,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link href="{% static "css/cover.css" %}" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="site-wrapper">
@@ -78,12 +79,24 @@
             });
         </script>
     <script type="text/javascript">
-        var a = document.getElementById("btncompare");
-        a.onclick = function() {
-            var input = document.getElementById("txtcompare").value;
-            a.href = "?compare=" + input;
-            return true;
-        };
+        $(document).ready(function(){
+            var getCompareLink = function() {
+                return "?compare=" + document.getElementById("txtcompare").value;
+            }
+            // click button submits request
+            $('#btncompare').onclick = function() {
+                this.href = getCompareLink();
+                return true;
+            };
+
+            // Press enter clicks button
+            $('#txtcompare').keypress(function(e){
+                if(e.keyCode==13) {
+                    $('#btncompare').click();
+                    window.location = getCompareLink();
+                }
+            });
+        });
     </script>
   </body>
 </html>
