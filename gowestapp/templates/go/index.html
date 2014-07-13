@@ -13,13 +13,16 @@
     <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
     <link href="{% static "css/bootstrap-responsive.css" %}" rel="stylesheet">
     <link href="{% static "css/gowest.css" %}" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
   <body>
+
+  {% if not info %}
 
     <div id="myCarousel" class="carousel slide">
       <div class="carousel-inner">
         <div class="item active">
-          <img src="{% static "img/bgr2.png" %}" alt="">
+          <img src="{% static "img/bgr2.jpg" %}" alt="">
           <div class="container">
             <div class="carousel-caption">
               <h1>Go Western Sydney!</h1>
@@ -37,21 +40,49 @@
       </div>
     </div>
 
-    <div class="container marketing">
+  {% endif %}
 
 
-    {% if info %}
+  {% if info %}
+
+    <div id="myCarousel" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="{% static "img/bgr2.png" %}" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>How does Western Sydney compare to: </br> {{ compare }} ?</h1></br>
+            <p class="lead">Have you ever considered the advantages of living, working or visiting Western Sydney? </br>The results may surprise you!</p></br>
+            <p class="lead">Suburb:
+              <span class="glyphicon glyphicon-screenshot"></span>
+                <input id="txtcompare" class="form-control" type="text" data-provide="typeahead"
+                data-source='{{non_ws_suburbs|safe}}' value="{{ compare }}" />
+            </p>
+              <a id="btncompare" href="#" class="btn btn-large btn-primary">Compare</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
       <!-- START THE FEATURETTES -->
+    <div class="container marketing">
 
-      <hr class="featurette-divider">
+      <h3 class="">Please check the results below... <i class="fa fa-level-down fa-2x"></i> </h3>
 
         <!--{{ info }}-->
 
       {% if costOfLiving %}
       <div class="featurette">
+<<<<<<< HEAD
         <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
         <h2 class="featurette-heading">{{ costOfLiving.heading }}<span class="muted"></span></h2>
+=======
+        <img class="featurette-image pull-right" src="{% static "img/family_house.png" %}">
+        <h2 class="featurette-heading">How does median rent compare?
+            <span class="muted">{{ medianrent.heading }}</span></h2>
+>>>>>>> 442e8d885af1b3a1a7695ca8b9f29ae2b640ff05
         <p class="lead">
             {% for line in costOfLiving.text %}
             {{ line }}<br />
@@ -61,8 +92,8 @@
       {% endif %}
 
       <div class="featurette">
-        <img class="featurette-image pull-left" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">How does crime ranking compare?
+        <img class="featurette-image pull-left" src="{% static "img/helping_elderly.png" %}">
+        <h2 class="featurette-heading">How about crime ranking?
             <span class="muted"></span></h2>
         <p class="lead">
             {{ crimerank }}
@@ -72,18 +103,18 @@
       <hr class="featurette-divider">
 
       <div class="featurette">
-        <img class="featurette-image pull-left" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">You are missing out on <span class="muted">all these attractions!</span></h2>
+        <img class="featurette-image pull-right" src="{% static "img/kids_playing.png" %}">
+        <h2 class="featurette-heading">Also, you are missing out on these <span class="muted">attractions and events!</span></h2>
         <p class="lead">
                 {% for item in randomattractions %}
                      <a href="{{ item.url }}">{{ item.place }}</a> and
                 {% endfor %} more if you don't visit Western Sydney! Visit
                 <a href="http://www.sydney.com/destinations/sydney/sydney-west">Sydney.com</a> for more attractions! <br />
                  <br />
-                And do you want to spent time in exciting events? Check out
+                And do you want to spend time on exciting events? Check out
                 {% for item in randomevents %}
                      <a href="{{ item.url }}">{{ item.place }}</a> and
-                {% endfor %} more if you don't visit Western Sydney! Visit
+                {% endfor %} more in Western Sydney! Visit
                 <a href="http://www.sydney.com/destinations/sydney/sydney-west/events">Sydney.com</a> for more activities! <br />
         </p>
       </div>
@@ -92,8 +123,8 @@
 
                 {% if redlightfines %}
       <div class="featurette">
-        <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">And lastly, what abour red light fines? <span class="muted">{{ redlightfines.heading }}</span></h2>
+        <img class="featurette-image pull-right" src="{% static "img/driver.png" %}">
+        <h2 class="featurette-heading">Commuting? <span class="muted">{{ redlightfines.heading }}</span></h2>
         <p class="lead">
                 {% for line in redlightfines.text %}
                 {{ line }}<br />
@@ -111,6 +142,8 @@
 
       <!-- FOOTER -->
       <footer>
+          <p></br></p>
+          <p></br></p>
         <p>Created by #GovHack 2014 Team "Optimer Prime"</p>
       </footer>
 
