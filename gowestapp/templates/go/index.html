@@ -90,7 +90,7 @@
 
       <div class="featurette">
         <img class="featurette-image pull-left" src="{% static "img/helping_elderly.png" %}">
-        <h2 class="featurette-heading">How about crime ranking?
+        <h2 class="featurette-heading">Safety
             <span class="muted"></span></h2>
         <p class="lead">
             {{ crimerank }}
@@ -101,14 +101,14 @@
 
       <div class="featurette">
         <img class="featurette-image pull-right" src="{% static "img/kids_playing.png" %}">
-        <h2 class="featurette-heading">Also, you are missing out on these <span class="muted">attractions and events!</span></h2>
+        <h2 class="featurette-heading">Attractions and events</h2>
         <p class="lead">
-                {% for item in randomattractions %}
-                     <a href="{{ item.url }}">{{ item.place }}</a> and
-                {% endfor %} more if you don't visit Western Sydney! Visit
+                You would be unable to enjoy {% for item in randomattractions %}
+                     <a href="{{ item.url }}">{{ item.place }}</a>,
+                {% endfor %} as well as a veritable myriad of other exciting destinations if you don't visit Western Sydney! Visit
                 <a href="http://www.sydney.com/destinations/sydney/sydney-west">Sydney.com</a> for more attractions! <br />
                  <br />
-                And do you want to spend time on exciting events? Check out
+                And do you want to spend time at exciting events? Check out
                 {% for item in randomevents %}
                      <a href="{{ item.url }}">{{ item.place }}</a> and
                 {% endfor %} more in Western Sydney! Visit

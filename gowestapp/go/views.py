@@ -23,8 +23,11 @@ def index(request):
 
     westernSydneyPostcodes = list(set([suburbToPostcode[i] for i in westernSydneySuburbs if i in suburbToPostcode]))
 
-    postCode = suburbToPostcode[findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion)[0]]
-    context['costOfLiving'] = getCostOfLiving(compare, postCode, westernSydneyPostcodes, suburbToPostcode)
+    try:
+        postCode = suburbToPostcode[findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion)[0]]
+        context['costOfLiving'] = getCostOfLiving(compare, postCode, westernSydneyPostcodes, suburbToPostcode)
+    except:
+        pass
 
     context['crimerank'] = getCrimeRank(matchedLGAs, westernSydneyLGAs)
 
@@ -144,7 +147,7 @@ def getEvents():
 
 def getCrimeRank(matchedLGAs, westernSydneyLGAs):
     random.shuffle(westernSydneyLGAs)
-    outputStr = "Did you know that your local area {0}, is ranked worse/higher ({1}) in crime category of {2}, comparing to Western Sydney area {3} (ranked {4}) in 2013?!"
+    outputStr = "Did you know that {0} has a significantly worse issue with {2} (Ranked {1}th) than {3} (Ranked {4}th)?"
     dataset = getCrimeRankStats()
     for matchedLGA in matchedLGAs:
         if matchedLGA in dataset:
