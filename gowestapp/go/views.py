@@ -18,7 +18,10 @@ def index(request):
     context['non_ws_suburbs'] = str(getUniqueItems(nwss)).replace("'", '"')
     context['compare'] = compare
     context['info'] = getcompareinfo(compare, suburbsToLGA, lgaToRegion, westernSydneyLGAs)
-    context['medianrent'] = getMedianRent(compare, findMatchingLGAs(compare, suburbsToLGA, lgaToRegion), westernSydneyLGAs)
+    matchedLGAs = findMatchingLGAs(compare, suburbsToLGA, lgaToRegion)
+    context['medianrent'] = getMedianRent(compare, matchedLGAs, westernSydneyLGAs)
+    context['crimerank'] = getCrimeRank(matchedLGAs, westernSydneyLGAs)
+
     x = getAttractions()
     attractions = []
     for i in x:
