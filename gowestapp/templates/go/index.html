@@ -22,7 +22,7 @@
     <div id="myCarousel" class="carousel slide">
       <div class="carousel-inner">
         <div class="item active">
-          <img src="{% static "img/bgr2.png" %}" alt="">
+          <img src="{% static "img/bgr2.jpg" %}" alt="">
           <div class="container">
             <div class="carousel-caption">
               <h1>Go Western Sydney!</h1>
@@ -118,8 +118,8 @@
 
                 {% if redlightfines %}
       <div class="featurette">
-        <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">And lastly, what abour red light fines? <span class="muted">{{ redlightfines.heading }}</span></h2>
+        <img class="featurette-image pull-right" src="{% static "img/driver.png" %}">
+        <h2 class="featurette-heading">Commuting? <span class="muted">{{ redlightfines.heading }}</span></h2>
         <p class="lead">
                 {% for line in redlightfines.text %}
                 {{ line }}<br />
