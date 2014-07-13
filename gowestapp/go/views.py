@@ -183,7 +183,7 @@ def getCrimeRank(matchedLGAs, westernSydneyLGAs):
                         float(matchedLGARank[17]) < float(westernSydneyLGARank[17]):
                         return outputStr.format(matchedLGA,matchedLGARank[17],"sexual offences", westernSydneyLGA, westernSydneyLGARank[17])
 
-    return "Congrats, your area is at least just as safe as Western Sydney in 2013."
+    return "Congrats, your area is just as safe as Western Sydney in 2013."
 
 def getRedLightFines(compare, suburbs, westernSydneySuburbs):
     if len(suburbs) == 0:
