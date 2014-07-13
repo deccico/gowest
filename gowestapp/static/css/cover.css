@@ -16,7 +16,7 @@ a:hover {
   color: #333;
   text-shadow: none; /* Prevent inheritence from `body` */
   background-color: #fff;
-  border: 1px solid #fff;
+  border: 1px solid #999;
 }
 
 
@@ -30,9 +30,13 @@ body {
   background-color: #fff;
 }
 body {
-  color: #333;
+  color: #5a5a5a;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  text-shadow: 0 1px 1px rgba(0,0,0,.5);
+  font-size: 18px;
+  font-weight: 200;
+  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+  line-height: 25px;
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
@@ -124,7 +128,7 @@ body {
 
 .mastfoot {
   color: #999; /* IE8 proofing */
-  color: rgba(255,255,255,.5);
+  color: rgba(64,64,64,.5);
 }
 
 
