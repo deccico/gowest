@@ -15,6 +15,7 @@ def index(request):
     compare = ' '.join(w.capitalize() for w in request.GET.get('compare', '').strip().split())    # trim and title capitalise
 
     nwss = sorted([suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga not in westernSydneyLGAs])
+    westernSydneySuburbs = [suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga in westernSydneyLGAs]
     context['non_ws_suburbs'] = str(getUniqueItems(nwss)).replace("'", '"')
     context['compare'] = compare
     context['info'] = getcompareinfo(compare, suburbsToLGA, lgaToRegion, westernSydneyLGAs)
@@ -33,7 +34,7 @@ def index(request):
     for i in x:
         events.append({"url":x[i], "place":i})
     context['randomevents'] = events
-
+    context['redlightfines'] = getRedLightFines(compare, findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion), westernSydneySuburbs)
     return render(request, 'go/index.html', context)
 
 def getUniqueItems(seq):
@@ -41,13 +42,24 @@ def getUniqueItems(seq):
     seen_add = seen.add
     return [ x for x in seq if not (x in seen or seen_add(x))]
 
-
+# Get an LGA given the input; if the input is a suburb find its LGA
 def findMatchingLGAs(compare, suburbToLGA, lgaToRegion):
     if compare in lgaToRegion:
         return [compare]
     elif compare in suburbToLGA:
         return suburbToLGA[compare]
     return []
+
+# Get a list of suburbs given the input; if the input is an LGA find all its suburbs
+def findMatchingSuburbs(compare, suburbToLGA, lgaToRegion):
+    if compare in suburbToLGA:
+        return [compare]
+    elif compare in lgaToRegion:
+        return getSuburbsInLGA(compare, suburbToLGA)
+    return []
+
+def getSuburbsInLGA(lga, suburbToLGA):
+    return [s for s in suburbToLGA.keys() for l in suburbToLGA[s] if l == lga]
 
 def getcompareinfo(compare, suburbToLGA, lgaToRegion, westernSydneyLGAs):
     if compare == '':
@@ -93,7 +105,7 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     medianRent, _ = getMedianWeeklyRent(LGAs)
     medianRentWest, lowest5WestLGA = getMedianWeeklyRent(westernSydneyLGAs)
     if medianRent is None or medianRentWest is None:
-        return ''
+        return None
 
     place = 'Western Sydney'
     # See if the rent for Western Sydney is lower. If not, find a low-rent area in Western Sydney to compare
@@ -101,10 +113,14 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     if len(lowest5WestLGA) > 0 and medianRentWest >= medianRent and lowest5WestLGA[randomLowestRentLGAInTheWest] < medianRent:
         place = randomLowestRentLGAInTheWest
         medianRentWest = lowest5WestLGA[randomLowestRentLGAInTheWest]
-    out = 'The median weekly rent for ' + place + ' is $' + str(medianRentWest) +\
-          ', compared to $' + str(medianRent) + ' in ' + compare + '.'
-    if medianRentWest < medianRent:
-        out += ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!'
+    if medianRentWest >= medianRent:
+        return None
+
+    out = {}
+    out['heading'] = 'Affordable living'
+    out['text'] = ['The median weekly rent for ' + place + ' is $' + str(medianRentWest) +
+                   ', compared to $' + str(medianRent) + ' in ' + compare + '.',
+                   'That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!']
     return out
 
 def getAttractions():
@@ -123,7 +139,7 @@ def getEvents():
 
 def getCrimeRank(matchedLGAs, westernSydneyLGAs):
     random.shuffle(westernSydneyLGAs)
-    outputStr = "Did you know that your local area {0}, is ranked higher ({1}) in crime category of {2}, comparing to Western Sydney area {3} (ranked {4}) in 2013?!"
+    outputStr = "Did you know that your local area {0}, is ranked worse/higher ({1}) in crime category of {2}, comparing to Western Sydney area {3} (ranked {4}) in 2013?!"
     dataset = getCrimeRankStats()
     for matchedLGA in matchedLGAs:
         if matchedLGA in dataset:
