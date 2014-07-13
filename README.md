@@ -1,11 +1,14 @@
 Go West!
 ========
 
+Entry for the Govhack competition
+
+Url: http://hackerspace.govhack.org/content/go-west
+
 Requirements:  Django 1.6
 
-Gowestapp is the web app folder
 
-Please add your additional (non Django specific files) into the root directory.
+
 
 
 
