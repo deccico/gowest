@@ -93,7 +93,7 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     medianRent, _ = getMedianWeeklyRent(LGAs)
     medianRentWest, lowest5WestLGA = getMedianWeeklyRent(westernSydneyLGAs)
     if medianRent is None or medianRentWest is None:
-        return ''
+        return None
 
     place = 'Western Sydney'
     # See if the rent for Western Sydney is lower. If not, find a low-rent area in Western Sydney to compare
@@ -101,10 +101,13 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     if len(lowest5WestLGA) > 0 and medianRentWest >= medianRent and lowest5WestLGA[randomLowestRentLGAInTheWest] < medianRent:
         place = randomLowestRentLGAInTheWest
         medianRentWest = lowest5WestLGA[randomLowestRentLGAInTheWest]
-    out = 'The median weekly rent for ' + place + ' is $' + str(medianRentWest) +\
-          ', compared to $' + str(medianRent) + ' in ' + compare + '.'
-    if medianRentWest < medianRent:
-        out += ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!'
+    if medianRentWest >= medianRent:
+        return None
+    out = {}
+    out['heading'] = 'Affordable living'
+    out['text'] = ['The median weekly rent for ' + place + ' is $' + str(medianRentWest) +
+                   ', compared to $' + str(medianRent) + ' in ' + compare + '.',
+                   'That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!']
     return out
 
 def getAttractions():

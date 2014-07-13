@@ -5,7 +5,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Carousel Template &middot; Bootstrap</title>
+    <title>Go West!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -46,26 +46,26 @@
 
       <hr class="featurette-divider">
 
-      <div class="featurette">
-        <p class="lead">
-            {{ info }}
-        </p>
-      </div>
+        <!--{{ info }}-->
 
+      {% if medianrent %}
       <div class="featurette">
         <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">How does median rent compares?
+        <h2 class="featurette-heading">{{ medianrent.heading }}
             <span class="muted"></span></h2>
         <p class="lead">
-            {{ medianrent }}
+            {% for line in medianrent.text %}
+            {{ line }}<br />
+            {% endfor %}
         </p>
       </div>
+      {% endif %}
 
       <hr class="featurette-divider">
 
       <div class="featurette">
         <img class="featurette-image pull-left" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">Also, you are missing out. <span class="muted">All this attractions!</span></h2>
+        <h2 class="featurette-heading">You are missing out on <span class="muted">all these attractions!</span></h2>
         <p class="lead">
                 {% for item in randomattractions %}
                      <a href="{{ item.url }}">{{ item.place }}</a> and
