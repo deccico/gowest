@@ -13,11 +13,20 @@ def index(request):
     context = {}
     suburbsToLGA, lgaToRegion, suburbToPostcode = process.process()
     compare = ' '.join(w.capitalize() for w in request.GET.get('compare', '').strip().split())    # trim and title capitalise
-
     nwss = sorted([suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga not in westernSydneyLGAs])
     westernSydneySuburbs = [suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga in westernSydneyLGAs]
+    compareSuburbs = findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion)
+    isWesternSydney = False
+    for i in compareSuburbs:
+        if i in westernSydneySuburbs:
+            isWesternSydney = True
+
+    allsuburbs = sorted(list(set(suburbsToLGA.keys())))
+
     context['non_ws_suburbs'] = str(getUniqueItems(nwss)).replace("'", '"')
+    context['autocomplete'] = str(getUniqueItems(allsuburbs)).replace("'", '"')
     context['compare'] = compare
+    context['isWesternSydney'] = isWesternSydney
     context['info'] = getcompareinfo(compare, suburbsToLGA, lgaToRegion, westernSydneyLGAs)
     matchedLGAs = findMatchingLGAs(compare, suburbsToLGA, lgaToRegion)
 
