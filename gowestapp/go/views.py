@@ -139,7 +139,7 @@ def getEvents():
 
 def getCrimeRank(matchedLGAs, westernSydneyLGAs):
     random.shuffle(westernSydneyLGAs)
-    outputStr = "Did you know that your local area {0}, is ranked higher ({1}) in crime category of {2}, comparing to Western Sydney area {3} (ranked {4}) in 2013?!"
+    outputStr = "Did you know that your local area {0}, is ranked worse/higher ({1}) in crime category of {2}, comparing to Western Sydney area {3} (ranked {4}) in 2013?!"
     dataset = getCrimeRankStats()
     for matchedLGA in matchedLGAs:
         if matchedLGA in dataset:
