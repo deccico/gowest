@@ -58,7 +58,7 @@
 
       {% if info %}
 
-      <h3 class="">Please check the results below... <i class="fa fa-level-down fa-2x"></i> </h3>
+      <h3 id="resultsheading" class="">Please check the results below... <i class="fa fa-level-down fa-2x"></i> </h3>
 
         <!--{{ info }}-->
 
@@ -159,12 +159,10 @@
                 }
             });
 
-            document.getElementById('txtcompare').focus();
-
-            if ('{{ compare }}'.length > 0) {
+            if ($("#resultsheading").length) {
                 $(function(){
                     $('html, body').animate({
-                        scrollTop: $('#txtcompare').offset().top
+                        scrollTop: $("#resultsheading").offset().top + 60
                     }, 1000);
                     return false;
                 });
