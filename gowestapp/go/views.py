@@ -102,7 +102,7 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     medianRent, _ = getMedianWeeklyRent(LGAs)
     medianRentWest, lowest5WestLGA = getMedianWeeklyRent(westernSydneyLGAs)
     if medianRent is None or medianRentWest is None:
-        return ''
+        return None
 
     place = 'Western Sydney'
     # See if the rent for Western Sydney is lower. If not, find a low-rent area in Western Sydney to compare
@@ -110,10 +110,14 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     if len(lowest5WestLGA) > 0 and medianRentWest >= medianRent and lowest5WestLGA[randomLowestRentLGAInTheWest] < medianRent:
         place = randomLowestRentLGAInTheWest
         medianRentWest = lowest5WestLGA[randomLowestRentLGAInTheWest]
-    out = 'Affordable living: the median weekly rent for ' + place + ' is $' + str(medianRentWest) +\
-          ', compared to $' + str(medianRent) + ' in ' + compare + '.'
-    if medianRentWest < medianRent:
-        out += ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!'
+    if medianRentWest >= medianRent:
+        return None
+
+    out = {}
+    out['heading'] = 'Affordable living'
+    out['text'] = ['The median weekly rent for ' + place + ' is $' + str(medianRentWest) +
+                   ', compared to $' + str(medianRent) + ' in ' + compare + '.',
+                   ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!']
     return out
 
 def getAttractions():
@@ -132,20 +136,26 @@ def getEvents():
 
 def getRedLightFines(compare, suburbs, westernSydneySuburbs):
     if len(suburbs) == 0:
-        return ''
+        return None
     fines = getRedLightFinesBySuburb()
     avgnumber, avgfine = getRedLightFinesForSuburbs(suburbs, fines)
     avgnumberwest, avgfinewest = getRedLightFinesForSuburbs(westernSydneySuburbs, fines)
     if avgnumber is None:
-        return ''
+        return None
 
+    out = {}
     if avgnumber > avgnumberwest:
-        return 'Safer driving: the average annual red light offences for Western Sydney is ' + str(avgnumberwest) +\
-            ', compared to ' + str(avgnumber) + ' in ' + compare + '.'
+        out['heading'] = 'Safer driving'
+        out['text'] = ['The average annual red light offences for Western Sydney is ' + str(avgnumberwest) +
+                       ', compared to ' + str(avgnumber) + ' in ' + compare + '.']
+        return out
     elif avgfine > avgfinewest:
-        return 'Affordable: the average red light fine for Western Sydney is $' + str(avgfinewest) +\
-            ', compared to $' + str(avgfine) + ' in ' + compare + '. You save $' + str(avgfine - avgfinewest) + '!'
-    return ''
+        out['heading'] = 'Affordable'
+        out['text'] = ['The average red light fine for Western Sydney is $' + str(avgfinewest) +
+                       ', compared to $' + str(avgfine) + ' in ' + compare + '.',
+                       'You save $' + str(avgfine - avgfinewest) + '!']
+        return out
+    return None
 
 def getRedLightFinesForSuburbs(suburbs, fines):
     totalnumber = 0
