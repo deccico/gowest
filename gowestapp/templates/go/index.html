@@ -69,9 +69,9 @@
 
       {% if medianrent %}
       <div class="featurette">
-        <img class="featurette-image pull-right" src="{% static "img/family_house.jpg" %}">
+        <img class="featurette-image pull-right" src="{% static "img/family_house.png" %}">
         <h2 class="featurette-heading">How does median rent compare?
-            <span class="muted"></span></h2>
+            <span class="muted">{{ medianrent.heading }}</span></h2>
         <p class="lead">
             {% for line in medianrent.text %}
             {{ line }}<br />
@@ -92,18 +92,18 @@
       <hr class="featurette-divider">
 
       <div class="featurette">
-        <img class="featurette-image pull-right" src="{% static "img/kids_playing.jpg" %}">
-        <h2 class="featurette-heading">Also, you are missing out these attractions and events!</h2>
+        <img class="featurette-image pull-right" src="{% static "img/kids_playing.png" %}">
+        <h2 class="featurette-heading">Also, you are missing out on these <span class="muted">attractions and events!</span></h2>
         <p class="lead">
                 {% for item in randomattractions %}
                      <a href="{{ item.url }}">{{ item.place }}</a> and
                 {% endfor %} more if you don't visit Western Sydney! Visit
                 <a href="http://www.sydney.com/destinations/sydney/sydney-west">Sydney.com</a> for more attractions! <br />
                  <br />
-                And do you want to spent time in exciting events? Check out
+                And do you want to spend time on exciting events? Check out
                 {% for item in randomevents %}
                      <a href="{{ item.url }}">{{ item.place }}</a> and
-                {% endfor %} more if you don't visit Western Sydney! Visit
+                {% endfor %} more in Western Sydney! Visit
                 <a href="http://www.sydney.com/destinations/sydney/sydney-west/events">Sydney.com</a> for more activities! <br />
         </p>
       </div>
