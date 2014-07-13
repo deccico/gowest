@@ -197,13 +197,13 @@ def getRedLightFines(compare, suburbs, westernSydneySuburbs):
     out = {}
     if avgnumber > avgnumberwest:
         out['heading'] = 'Safer driving'
-        out['text'] = ['The average annual red light offences for Western Sydney is ' + str(avgnumberwest) +
-                       ', compared to ' + str(avgnumber) + ' in ' + compare + '.']
+        out['text'] = ['The average annual count of red light offences for Western Sydney is ' + str(avgnumberwest) +
+                       ', as opposed to to ' + str(avgnumber) + ' in ' + compare + '.']
         return out
     elif avgfine > avgfinewest:
         out['heading'] = 'Affordable'
         out['text'] = ['The average red light fine for Western Sydney is $' + str(avgfinewest) +
-                       ', compared to $' + str(avgfine) + ' in ' + compare + '.',
+                       ', as opposed to $' + str(avgfine) + ' in ' + compare + '.',
                        'You save $' + str(avgfine - avgfinewest) + '!']
         return out
     return None
