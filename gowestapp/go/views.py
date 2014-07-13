@@ -172,11 +172,11 @@ def getCrimeRank(matchedLGAs, westernSydneyLGAs):
                         float(matchedLGARank[2]) < float(westernSydneyLGARank[2]):
                         #return matchedLGA+":"+str(matchedLGARank[2])+" vs "+westernSydneyLGA + ":" + str(westernSydneyLGARank[2])
                         # + " " + str(matchedLGARank) + " " + str(westernSydneyLGARank)
-                        return outputStr.format(matchedLGA,matchedLGARank[2],"personal stealing", westernSydneyLGA, westernSydneyLGARank[2])
+                        return outputStr.format(matchedLGA,matchedLGARank[2],"personal theft", westernSydneyLGA, westernSydneyLGARank[2])
                     elif matchedLGARank[5].strip() != '-' and matchedLGARank[5].strip() != 'nc' and \
                         westernSydneyLGARank[5].strip() != '-' and westernSydneyLGARank[5].strip() != 'nc' and \
                         float(matchedLGARank[5]) < float(westernSydneyLGARank[5]):
-                        return outputStr.format(matchedLGA,matchedLGARank[5],"stealing from motor vehicle", westernSydneyLGA, westernSydneyLGARank[5])
+                        return outputStr.format(matchedLGA,matchedLGARank[5],"theft from a motor vehicle", westernSydneyLGA, westernSydneyLGARank[5])
                     elif matchedLGARank[8].strip() != '-' and matchedLGARank[8].strip() != 'nc' and \
                         westernSydneyLGARank[8].strip() != '-' and westernSydneyLGARank[8].strip() != 'nc' and \
                         float(matchedLGARank[8]) < float(westernSydneyLGARank[8]):
@@ -184,11 +184,11 @@ def getCrimeRank(matchedLGAs, westernSydneyLGAs):
                     elif matchedLGARank[11].strip() != '-' and matchedLGARank[11].strip() != 'nc' and \
                         westernSydneyLGARank[11].strip() != '-' and westernSydneyLGARank[11].strip() != 'nc' and \
                         float(matchedLGARank[11]) < float(westernSydneyLGARank[11]):
-                        return outputStr.format(matchedLGA,matchedLGARank[11],"non-domestic assault violence", westernSydneyLGA, westernSydneyLGARank[11])
+                        return outputStr.format(matchedLGA,matchedLGARank[11],"non-domestic assault", westernSydneyLGA, westernSydneyLGARank[11])
                     elif matchedLGARank[14].strip() != '-' and matchedLGARank[14].strip() != 'nc' and \
                         westernSydneyLGARank[14].strip() != '-' and westernSydneyLGARank[14].strip() != 'nc' and \
                         float(matchedLGARank[14]) < float(westernSydneyLGARank[14]):
-                        return outputStr.format(matchedLGA,matchedLGARank[14],"domestic assault violence", westernSydneyLGA, westernSydneyLGARank[14])
+                        return outputStr.format(matchedLGA,matchedLGARank[14],"domestic assault", westernSydneyLGA, westernSydneyLGARank[14])
                     elif matchedLGARank[17].strip() != '-' and matchedLGARank[17].strip() != 'nc' and \
                         westernSydneyLGARank[17].strip() != '-' and westernSydneyLGARank[17].strip() != 'nc' and \
                         float(matchedLGARank[17]) < float(westernSydneyLGARank[17]):
