@@ -3,6 +3,7 @@ Process raw data into dictionary: {state => {lga => {weekly rent bin => count}}}
 e.g. {'New South Wales' => {'North Sydney' => {'$450-$549' => 2790}}}
 '''
 import csv
+import os
 
 class CrimeEntry:
     def __init__(self, total, ratePer100000, rank):
@@ -11,7 +12,7 @@ class CrimeEntry:
         self.rank = rank
 
 def process():
-    file = open('data.csv', 'r')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/data.csv', 'r')
     reader = csv.reader(file)
     results = {}
     lineCounter = 0
@@ -33,6 +34,8 @@ def process():
 def getsomething():
     return "something"
 
+def getCrimeRankStats():
+    return process()
 
 if __name__ == '__main__':
     print process()
