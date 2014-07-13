@@ -75,14 +75,8 @@
 
       {% if costOfLiving %}
       <div class="featurette">
-<<<<<<< HEAD
-        <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">{{ costOfLiving.heading }}<span class="muted"></span></h2>
-=======
         <img class="featurette-image pull-right" src="{% static "img/family_house.png" %}">
-        <h2 class="featurette-heading">How does median rent compare?
-            <span class="muted">{{ medianrent.heading }}</span></h2>
->>>>>>> 442e8d885af1b3a1a7695ca8b9f29ae2b640ff05
+        <h2 class="featurette-heading">{{ costOfLiving.heading }}<span class="muted"></span></h2>
         <p class="lead">
             {% for line in costOfLiving.text %}
             {{ line }}<br />
