@@ -1,11 +1,11 @@
 from django.shortcuts import render
 
 from go.datasets.lga_suburb_list import process
-from go.datasets.census_rent.process import getMedianWeeklyRent
 from go.datasets.attractions.process import selectrandom2attractions
 from go.datasets.events.process import selectrandom2events
 from go.datasets.red_light_camera_notices.process import getRedLightFinesBySuburb
 from go.datasets.crime.process import getCrimeRankStats
+from go.datasets.census_preproc.process import getCostOfLiving
 import random
 
 def index(request):
@@ -20,7 +20,12 @@ def index(request):
     context['compare'] = compare
     context['info'] = getcompareinfo(compare, suburbsToLGA, lgaToRegion, westernSydneyLGAs)
     matchedLGAs = findMatchingLGAs(compare, suburbsToLGA, lgaToRegion)
-    context['medianrent'] = getMedianRent(compare, matchedLGAs, westernSydneyLGAs)
+
+    westernSydneyPostcodes = list(set([suburbToPostcode[i] for i in westernSydneySuburbs if i in suburbToPostcode]))
+
+    postCode = suburbToPostcode[findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion)[0]]
+    context['costOfLiving'] = getCostOfLiving(compare, postCode, westernSydneyPostcodes, suburbToPostcode)
+
     context['crimerank'] = getCrimeRank(matchedLGAs, westernSydneyLGAs)
 
     x = getAttractions()
