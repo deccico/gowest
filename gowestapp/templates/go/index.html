@@ -81,8 +81,20 @@
         </p>
       </div>
 
+      {% if gogreen %}
       <div class="featurette">
-        <img class="featurette-image pull-right" src="{% static "img/kids_playing.png" %}">
+        <img class="featurette-image pull-right" src="{% static "img/gardener.png" %}">
+        <h2 class="featurette-heading">{{ gogreen.heading }}<span class="muted"></span></h2>
+        <p class="lead">
+            {% for line in gogreen.text %}
+            {{ line }}<br />
+            {% endfor %}
+        </p>
+      </div>
+      {% endif %}
+
+      <div class="featurette">
+        <img class="featurette-image pull-left" src="{% static "img/kids_playing.png" %}">
         <h2 class="featurette-heading">Attractions and events</h2>
         <p class="lead">
                 You would be unable to enjoy {% for item in randomattractions %}

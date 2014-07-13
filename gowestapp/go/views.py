@@ -6,6 +6,7 @@ from go.datasets.events.process import selectrandom2events
 from go.datasets.red_light_camera_notices.process import getRedLightFinesBySuburb
 from go.datasets.crime.process import getCrimeRankStats
 from go.datasets.census_preproc.process import getCostOfLiving
+from go.datasets.travel_method.process import getPercentCommutersByType
 import random
 
 def index(request):
@@ -43,6 +44,7 @@ def index(request):
         events.append({"url":x[i], "place":i})
     context['randomevents'] = events
     context['redlightfines'] = getRedLightFines(compare, findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion), westernSydneySuburbs)
+    context['gogreen'] = getGreenTransport(compare, matchedLGAs, westernSydneyLGAs)
     return render(request, 'go/index.html', context)
 
 def getUniqueItems(seq):
@@ -220,3 +222,26 @@ def getRedLightFinesForSuburbs(suburbs, fines):
     if suburbsfound > 0:
         return totalnumber / suburbsfound, totalfines / suburbsfound
     return None, None
+
+def getGreenTransport(compare, LGAs, westernSydneyLGAs):
+    pctbike = getPercentCommutersByType(LGAs, 'bikeorwalk')
+    pctpublic = getPercentCommutersByType(LGAs, 'publictransport')
+    pctbikewest = getPercentCommutersByType(westernSydneyLGAs, 'bikeorwalk')
+    pctpublicwest = getPercentCommutersByType(westernSydneyLGAs, 'publictransport')
+    winratiobike = 0
+    if pctbikewest > 0:
+        winratiobike = (pctbikewest - pctbike) / pctbikewest
+    winratiopublic = 0
+    if pctpublicwest > 0:
+        winratiopublic = (pctpublicwest - pctpublic) / pctpublicwest
+    if winratiobike <= 0 and winratiopublic <= 0:
+        return None
+    out = {}
+    out['heading'] = 'Sustainable living'
+    if winratiobike > winratiopublic:
+        out['text'] = [('%.1f' % (pctbikewest * 100)) + '% of Western Sydneysiders bicycled or walked to work.',
+                       'That\'s more than the ' + ('%.1f' % (pctbike * 100)) + '% in ' + compare + '!']
+    else:
+        out['text'] = [('%.1f' % (pctpublicwest * 100)) + '% of Western Sydneysiders took public transport to work.',
+                       'That\'s more than the ' + ('%.1f' % (pctpublic * 100)) + '% in ' + compare + '!']
+    return out
