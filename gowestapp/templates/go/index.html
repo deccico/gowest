@@ -84,8 +84,6 @@
         </p>
       </div>
 
-      <hr class="featurette-divider">
-
       <div class="featurette">
         <img class="featurette-image pull-right" src="{% static "img/kids_playing.png" %}">
         <h2 class="featurette-heading">Attractions and events</h2>
@@ -102,8 +100,6 @@
                 <a href="http://www.sydney.com/destinations/sydney/sydney-west/events">Sydney.com</a> for more activities! <br />
         </p>
       </div>
-
-      <hr class="featurette-divider">
 
                 {% if redlightfines %}
       <div class="featurette">
@@ -165,6 +161,15 @@
             });
 
             document.getElementById('txtcompare').focus();
+
+            if ('{{ compare }}'.length > 0) {
+                $(function(){
+                    $('html, body').animate({
+                        scrollTop: $('#txtcompare').offset().top
+                    }, 1000);
+                    return false;
+                });
+            }
         });
     </script>
   </body>
