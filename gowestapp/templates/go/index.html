@@ -51,8 +51,7 @@
       {% if medianrent %}
       <div class="featurette">
         <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">{{ medianrent.heading }}
-            <span class="muted"></span></h2>
+        <h2 class="featurette-heading">{{ medianrent.heading }}<span class="muted"></span></h2>
         <p class="lead">
             {% for line in medianrent.text %}
             {{ line }}<br />
@@ -60,6 +59,15 @@
         </p>
       </div>
       {% endif %}
+
+      <div class="featurette">
+        <img class="featurette-image pull-left" src="{% static "img/browser-icon-chrome.png" %}">
+        <h2 class="featurette-heading">How does crime ranking compare?
+            <span class="muted"></span></h2>
+        <p class="lead">
+            {{ crimerank }}
+        </p>
+      </div>
 
       <hr class="featurette-divider">
 
