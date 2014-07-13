@@ -73,7 +73,7 @@
     .carousel-caption {
       background-color: transparent;
       position: static;
-      max-width: 950px;
+      max-width: 100%;
       padding: 0 20px;
       margin-top: 200px;
     }
@@ -206,20 +206,3 @@
       }
 
     }
-
-    .big {
-      width: 28px;  // 14px * 2
-      height: 28px; // 14px * 2
-      background-size: 938px 318px;  // original dimensions * 2
-      background-position: -624px -48px;  // original position * 2
-              font-size: 78px;
-
-    }
-
-    .logo-icon {
-    transform:scale(2.0,2.0);
-    -ms-transform:scale(2.0,2.0); /* IE 9 */
-    -moz-transform:scale(2.0,2.0); /* Firefox */
-    -webkit-transform:scale(2.0,2.0); /* Safari and Chrome */
-    -o-transform:scale(2.0,2.0); /* Opera */
-}
