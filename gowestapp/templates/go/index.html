@@ -93,7 +93,7 @@
                 {% if redlightfines %}
       <div class="featurette">
         <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
-        <h2 class="featurette-heading">And lastly, what abour red light fines? <span class="muted">{{ redlightfines.heading }}</span></h2>
+        <h2 class="featurette-heading">{{ redlightfines.heading }}<span class="muted"></span></h2>
         <p class="lead">
                 {% for line in redlightfines.text %}
                 {{ line }}<br />
