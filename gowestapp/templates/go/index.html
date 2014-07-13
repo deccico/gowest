@@ -1,49 +1,72 @@
 {% load staticfiles %}
 
+
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Go Go West!</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Carousel Template &middot; Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "css/bootstrap-responsive.css" %}" rel="stylesheet">
+    <link href="{% static "css/gowest.css" %}" rel="stylesheet">
+  </head>
+  <body>
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap-theme.min.css">
-    <link href="{% static "css/cover.css" %}" rel="stylesheet">
-</head>
-
-<body>
-    <div class="site-wrapper">
-      <div class="site-wrapper-inner">
-        <div class="cover-container">
-
-          <div class="inner cover">
-            {% if not info %}
-            <h1 class="cover-heading">Go West!</h1>
-            <p class="lead">How does Western Sydney compare to your suburb of choice?</br>
-                Find out the facts - all may not be as you currently presume.</p>
-              </br> </br> </br> </br>
-            {% endif %}
+    <div id="myCarousel" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="{% static "img/bgr2.png" %}" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Go Western Sydney!</h1>
+              <p class="lead">How does Western Sydney compare to your suburb of choice?</br>
+                Find out the facts - all may not be as you currently presume.</p></br></br>
             <p class="lead">Suburb:
               <span class="glyphicon glyphicon-screenshot"></span>
                 <input id="txtcompare" class="form-control" type="text" data-provide="typeahead"
                 data-source='{{non_ws_suburbs|safe}}' />
             </p>
-            <p class="lead">
-              <a id="btncompare" href="#" class="btn btn-lg btn-default">Compare</a>
-            </p>
+              <a id="btncompare" href="#" class="btn btn-large btn-primary">Compare</a>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
 
-          {% if info %}
-          </br> </br> </br> </br>
-          <div class="inner cover">
-            <h1 class="cover-heading">Facts</h1>
-            <p class="lead">
-                {{ info }}<br />
-                {{ medianrent }}<br />
-                <br />
-                Also, you are missing out
+    <div class="container marketing">
+
+
+    {% if info %}
+
+      <!-- START THE FEATURETTES -->
+
+      <hr class="featurette-divider">
+
+      <div class="featurette">
+        <p class="lead">
+            {{ info }}
+        </p>
+      </div>
+
+      <div class="featurette">
+        <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
+        <h2 class="featurette-heading">How does median rent compares?
+            <span class="muted"></span></h2>
+        <p class="lead">
+            {{ medianrent }}
+        </p>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="featurette">
+        <img class="featurette-image pull-left" src="{% static "img/browser-icon-chrome.png" %}">
+        <h2 class="featurette-heading">Also, you are missing out. <span class="muted">All this attractions!</span></h2>
+        <p class="lead">
                 {% for item in randomattractions %}
                      <a href="{{ item.url }}">{{ item.place }}</a> and
                 {% endfor %} more if you don't visit Western Sydney! Visit
@@ -54,33 +77,34 @@
                      <a href="{{ item.url }}">{{ item.place }}</a> and
                 {% endfor %} more if you don't visit Western Sydney! Visit
                 <a href="http://www.sydney.com/destinations/sydney/sydney-west/events">Sydney.com</a> for more activities! <br />
-            </p>
-          </div>
-          {% endif %}
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Created by #GovHack 2014 Team Optimer Prime.</p>
-            </div>
-          </div>
-        </div>
+        </p>
       </div>
-    </div>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+      <hr class="featurette-divider">
+
+      <div class="featurette">
+        <img class="featurette-image pull-right" src="{% static "img/browser-icon-chrome.png" %}">
+        <h2 class="featurette-heading">And lastly, this one. <span class="muted">Checkmate.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+    {% endif %}
+
+
+      <!-- FOOTER -->
+      <footer>
+        <p>Created by #GovHack 2014 Team "Optimer Prime"</p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <script src="{% static "js/plugins.js" %}"  ></script>
-    <script>
-         $('#top-nav').onePageNav({
-             currentClass: 'active',
-             changeHash: true,
-             scrollSpeed: 1200
-        });
-    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             var getCompareLink = function() {
