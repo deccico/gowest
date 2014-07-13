@@ -5,6 +5,8 @@ from go.datasets.census_rent.process import getMedianWeeklyRent
 from go.datasets.attractions.process import selectrandom2attractions
 from go.datasets.events.process import selectrandom2events
 from go.datasets.red_light_camera_notices.process import getRedLightFinesBySuburb
+from go.datasets.crime.process import getCrimeRankStats
+import random
 
 def index(request):
     westernSydneyLGAs = ['Auburn', 'Bankstown', 'Blacktown', 'Blue Mountains', 'Camden', 'Campbelltown', 'Fairfield', 'Hawkesbury', 'The Hills', 'Holroyd', 'Liverpool', 'Parramatta', 'Penrith', 'Wollondilly']
@@ -13,11 +15,13 @@ def index(request):
     compare = ' '.join(w.capitalize() for w in request.GET.get('compare', '').strip().split())    # trim and title capitalise
 
     nwss = sorted([suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga not in westernSydneyLGAs])
-    westernSydneySuburbs = [suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga in westernSydneyLGAs]
     context['non_ws_suburbs'] = str(getUniqueItems(nwss)).replace("'", '"')
     context['compare'] = compare
     context['info'] = getcompareinfo(compare, suburbsToLGA, lgaToRegion, westernSydneyLGAs)
-    context['medianrent'] = getMedianRent(compare, findMatchingLGAs(compare, suburbsToLGA, lgaToRegion), westernSydneyLGAs)
+    matchedLGAs = findMatchingLGAs(compare, suburbsToLGA, lgaToRegion)
+    context['medianrent'] = getMedianRent(compare, matchedLGAs, westernSydneyLGAs)
+    context['crimerank'] = getCrimeRank(matchedLGAs, westernSydneyLGAs)
+
     x = getAttractions()
     attractions = []
     for i in x:
@@ -30,7 +34,6 @@ def index(request):
         events.append({"url":x[i], "place":i})
     context['randomevents'] = events
 
-    context['redlightfines'] = getRedLightFines(compare, findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion), westernSydneySuburbs)
     return render(request, 'go/index.html', context)
 
 def getUniqueItems(seq):
@@ -39,24 +42,12 @@ def getUniqueItems(seq):
     return [ x for x in seq if not (x in seen or seen_add(x))]
 
 
-# Get an LGA given the input; if the input is a suburb find its LGA
 def findMatchingLGAs(compare, suburbToLGA, lgaToRegion):
     if compare in lgaToRegion:
         return [compare]
     elif compare in suburbToLGA:
         return suburbToLGA[compare]
     return []
-
-# Get a list of suburbs given the input; if the input is an LGA find all its suburbs
-def findMatchingSuburbs(compare, suburbToLGA, lgaToRegion):
-    if compare in suburbToLGA:
-        return [compare]
-    elif compare in lgaToRegion:
-        return getSuburbsInLGA(compare, suburbToLGA)
-    return []
-
-def getSuburbsInLGA(lga, suburbToLGA):
-    return [s for s in suburbToLGA.keys() for l in suburbToLGA[s] if l == lga]
 
 def getcompareinfo(compare, suburbToLGA, lgaToRegion, westernSydneyLGAs):
     if compare == '':
@@ -102,7 +93,7 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     medianRent, _ = getMedianWeeklyRent(LGAs)
     medianRentWest, lowest5WestLGA = getMedianWeeklyRent(westernSydneyLGAs)
     if medianRent is None or medianRentWest is None:
-        return None
+        return ''
 
     place = 'Western Sydney'
     # See if the rent for Western Sydney is lower. If not, find a low-rent area in Western Sydney to compare
@@ -110,14 +101,10 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     if len(lowest5WestLGA) > 0 and medianRentWest >= medianRent and lowest5WestLGA[randomLowestRentLGAInTheWest] < medianRent:
         place = randomLowestRentLGAInTheWest
         medianRentWest = lowest5WestLGA[randomLowestRentLGAInTheWest]
-    if medianRentWest >= medianRent:
-        return None
-
-    out = {}
-    out['heading'] = 'Affordable living'
-    out['text'] = ['The median weekly rent for ' + place + ' is $' + str(medianRentWest) +
-                   ', compared to $' + str(medianRent) + ' in ' + compare + '.',
-                   ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!']
+    out = 'The median weekly rent for ' + place + ' is $' + str(medianRentWest) +\
+          ', compared to $' + str(medianRent) + ' in ' + compare + '.'
+    if medianRentWest < medianRent:
+        out += ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!'
     return out
 
 def getAttractions():
@@ -133,6 +120,46 @@ def getEvents():
     #for place,url in attractions.iteritems():
     #    out += "<a href='" + url + "'>" + place + "</a>" + ","
     return events
+
+def getCrimeRank(matchedLGAs, westernSydneyLGAs):
+    random.shuffle(westernSydneyLGAs)
+    outputStr = "Did you know that your local area {0}, is ranked higher ({1}) in crime category of {2}, comparing to Western Sydney area {3} (ranked {4}) in 2013?!"
+    dataset = getCrimeRankStats()
+    for matchedLGA in matchedLGAs:
+        if matchedLGA in dataset:
+            matchedLGARank = dataset[matchedLGA]
+            for westernSydneyLGA in westernSydneyLGAs:
+                if westernSydneyLGA in dataset:
+                    westernSydneyLGARank = dataset[westernSydneyLGA]
+                    #compare the rank
+                    if matchedLGARank[2].strip() != '-' and matchedLGARank[2].strip() != 'nc' and \
+                        westernSydneyLGARank[2].strip() != '-' and westernSydneyLGARank[2].strip() != 'nc' and \
+                        float(matchedLGARank[2]) < float(westernSydneyLGARank[2]):
+                        #return matchedLGA+":"+str(matchedLGARank[2])+" vs "+westernSydneyLGA + ":" + str(westernSydneyLGARank[2])
+                        # + " " + str(matchedLGARank) + " " + str(westernSydneyLGARank)
+                        return outputStr.format(matchedLGA,matchedLGARank[2],"personal stealing", westernSydneyLGA, westernSydneyLGARank[2])
+                    elif matchedLGARank[5].strip() != '-' and matchedLGARank[5].strip() != 'nc' and \
+                        westernSydneyLGARank[5].strip() != '-' and westernSydneyLGARank[5].strip() != 'nc' and \
+                        float(matchedLGARank[5]) < float(westernSydneyLGARank[5]):
+                        return outputStr.format(matchedLGA,matchedLGARank[5],"stealing from motor vehicle", westernSydneyLGA, westernSydneyLGARank[5])
+                    elif matchedLGARank[8].strip() != '-' and matchedLGARank[8].strip() != 'nc' and \
+                        westernSydneyLGARank[8].strip() != '-' and westernSydneyLGARank[8].strip() != 'nc' and \
+                        float(matchedLGARank[8]) < float(westernSydneyLGARank[8]):
+                        return outputStr.format(matchedLGA,matchedLGARank[8],"robbery", westernSydneyLGA, westernSydneyLGARank[8])
+                    elif matchedLGARank[11].strip() != '-' and matchedLGARank[11].strip() != 'nc' and \
+                        westernSydneyLGARank[11].strip() != '-' and westernSydneyLGARank[11].strip() != 'nc' and \
+                        float(matchedLGARank[11]) < float(westernSydneyLGARank[11]):
+                        return outputStr.format(matchedLGA,matchedLGARank[11],"non-domestic assault violence", westernSydneyLGA, westernSydneyLGARank[11])
+                    elif matchedLGARank[14].strip() != '-' and matchedLGARank[14].strip() != 'nc' and \
+                        westernSydneyLGARank[14].strip() != '-' and westernSydneyLGARank[14].strip() != 'nc' and \
+                        float(matchedLGARank[14]) < float(westernSydneyLGARank[14]):
+                        return outputStr.format(matchedLGA,matchedLGARank[14],"domestic assault violence", westernSydneyLGA, westernSydneyLGARank[14])
+                    elif matchedLGARank[17].strip() != '-' and matchedLGARank[17].strip() != 'nc' and \
+                        westernSydneyLGARank[17].strip() != '-' and westernSydneyLGARank[17].strip() != 'nc' and \
+                        float(matchedLGARank[17]) < float(westernSydneyLGARank[17]):
+                        return outputStr.format(matchedLGA,matchedLGARank[17],"sexual offences", westernSydneyLGA, westernSydneyLGARank[17])
+
+    return "Congrats, your area is at least just as safe as Western Sydney in 2013."
 
 def getRedLightFines(compare, suburbs, westernSydneySuburbs):
     if len(suburbs) == 0:
