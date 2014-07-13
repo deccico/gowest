@@ -4,6 +4,7 @@ from go.datasets.lga_suburb_list import process
 from go.datasets.census_rent.process import getMedianWeeklyRent
 from go.datasets.attractions.process import selectrandom2attractions
 from go.datasets.events.process import selectrandom2events
+from go.datasets.red_light_camera_notices.process import getRedLightFinesBySuburb
 
 def index(request):
     westernSydneyLGAs = ['Auburn', 'Bankstown', 'Blacktown', 'Blue Mountains', 'Camden', 'Campbelltown', 'Fairfield', 'Hawkesbury', 'The Hills', 'Holroyd', 'Liverpool', 'Parramatta', 'Penrith', 'Wollondilly']
@@ -12,6 +13,7 @@ def index(request):
     compare = ' '.join(w.capitalize() for w in request.GET.get('compare', '').strip().split())    # trim and title capitalise
 
     nwss = sorted([suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga not in westernSydneyLGAs])
+    westernSydneySuburbs = [suburb for suburb in suburbsToLGA.keys() for lga in suburbsToLGA[suburb] if lga in westernSydneyLGAs]
     context['non_ws_suburbs'] = str(getUniqueItems(nwss)).replace("'", '"')
     context['compare'] = compare
     context['info'] = getcompareinfo(compare, suburbsToLGA, lgaToRegion, westernSydneyLGAs)
@@ -28,6 +30,7 @@ def index(request):
         events.append({"url":x[i], "place":i})
     context['randomevents'] = events
 
+    context['redlightfines'] = getRedLightFines(compare, findMatchingSuburbs(compare, suburbsToLGA, lgaToRegion), westernSydneySuburbs)
     return render(request, 'go/index.html', context)
 
 def getUniqueItems(seq):
@@ -36,12 +39,24 @@ def getUniqueItems(seq):
     return [ x for x in seq if not (x in seen or seen_add(x))]
 
 
+# Get an LGA given the input; if the input is a suburb find its LGA
 def findMatchingLGAs(compare, suburbToLGA, lgaToRegion):
     if compare in lgaToRegion:
         return [compare]
     elif compare in suburbToLGA:
         return suburbToLGA[compare]
     return []
+
+# Get a list of suburbs given the input; if the input is an LGA find all its suburbs
+def findMatchingSuburbs(compare, suburbToLGA, lgaToRegion):
+    if compare in suburbToLGA:
+        return [compare]
+    elif compare in lgaToRegion:
+        return getSuburbsInLGA(compare, suburbToLGA)
+    return []
+
+def getSuburbsInLGA(lga, suburbToLGA):
+    return [s for s in suburbToLGA.keys() for l in suburbToLGA[s] if l == lga]
 
 def getcompareinfo(compare, suburbToLGA, lgaToRegion, westernSydneyLGAs):
     if compare == '':
@@ -95,7 +110,7 @@ def getMedianRent(compare, LGAs, westernSydneyLGAs):
     if len(lowest5WestLGA) > 0 and medianRentWest >= medianRent and lowest5WestLGA[randomLowestRentLGAInTheWest] < medianRent:
         place = randomLowestRentLGAInTheWest
         medianRentWest = lowest5WestLGA[randomLowestRentLGAInTheWest]
-    out = 'The median weekly rent for ' + place + ' is $' + str(medianRentWest) +\
+    out = 'Affordable living: the median weekly rent for ' + place + ' is $' + str(medianRentWest) +\
           ', compared to $' + str(medianRent) + ' in ' + compare + '.'
     if medianRentWest < medianRent:
         out += ' That\'s an annual saving of $' + str((medianRent - medianRentWest) * 52) + '!'
@@ -114,3 +129,33 @@ def getEvents():
     #for place,url in attractions.iteritems():
     #    out += "<a href='" + url + "'>" + place + "</a>" + ","
     return events
+
+def getRedLightFines(compare, suburbs, westernSydneySuburbs):
+    if len(suburbs) == 0:
+        return ''
+    fines = getRedLightFinesBySuburb()
+    avgnumber, avgfine = getRedLightFinesForSuburbs(suburbs, fines)
+    avgnumberwest, avgfinewest = getRedLightFinesForSuburbs(westernSydneySuburbs, fines)
+    if avgnumber is None:
+        return ''
+
+    if avgnumber > avgnumberwest:
+        return 'Safer driving: the average annual red light offences for Western Sydney is ' + str(avgnumberwest) +\
+            ', compared to ' + str(avgnumber) + ' in ' + compare + '.'
+    elif avgfine > avgfinewest:
+        return 'Affordable: the average red light fine for Western Sydney is $' + str(avgfinewest) +\
+            ', compared to $' + str(avgfine) + ' in ' + compare + '. You save $' + str(avgfine - avgfinewest) + '!'
+    return ''
+
+def getRedLightFinesForSuburbs(suburbs, fines):
+    totalnumber = 0
+    totalfines = 0
+    suburbsfound = 0
+    for suburb in suburbs:
+        if suburb in fines:
+            totalnumber += fines[suburb][0]
+            totalfines += fines[suburb][1]
+            suburbsfound += 1
+    if suburbsfound > 0:
+        return totalnumber / suburbsfound, totalfines / suburbsfound
+    return None, None
