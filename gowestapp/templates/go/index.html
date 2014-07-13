@@ -54,11 +54,9 @@
     </div>
 
       <!-- START THE FEATURETTES -->
-    <div class="container marketing">
+    <div class="container marketing" id="resultsheading">
 
       {% if info %}
-
-      <h3 id="resultsheading" class="">Please check the results below... <i class="fa fa-level-down fa-2x"></i> </h3>
 
         <!--{{ info }}-->
 
@@ -162,11 +160,13 @@
             if ($("#resultsheading").length) {
                 $(function(){
                     $('html, body').animate({
-                        scrollTop: $("#resultsheading").offset().top + 60
+                        scrollTop: $("#resultsheading").offset().top
                     }, 1000);
                     return false;
                 });
             }
+
+            document.getElementById("txtcompare").focus();
         });
     </script>
   </body>
